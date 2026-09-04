@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* ── Lumen palette ── */
+    --background: #0E1420;
+    --surface: #161D2B;
+    --text-primary: #EDEDED;
+    --text-muted: #8B93A3;
+    --accent: #C9A65B;
+    --accent-soft: #3A3220;
+    --border: #232C3D;
+
+    /* ── shadcn / ui tokens (mapped to Lumen palette) ── */
+    --foreground: #EDEDED;
+    --card: #161D2B;
+    --card-foreground: #EDEDED;
+    --popover: #161D2B;
+    --popover-foreground: #EDEDED;
+    --primary: #C9A65B;
+    --primary-foreground: #0E1420;
+    --secondary: #3A3220;
+    --secondary-foreground: #EDEDED;
+    --muted: #161D2B;
+    --muted-foreground: #8B93A3;
+    --accent-ui: #3A3220;
+    --accent-foreground: #EDEDED;
+    --destructive: #E54D4D;
+    --destructive-foreground: #EDEDED;
+    --input: #232C3D;
+    --ring: #C9A65B;
+    --radius: 0.625rem;
+
+    /* ── Sidebar ── */
+    --sidebar: #161D2B;
+    --sidebar-foreground: #EDEDED;
+    --sidebar-primary: #C9A65B;
+    --sidebar-primary-foreground: #0E1420;
+    --sidebar-accent: #3A3220;
+    --sidebar-accent-foreground: #EDEDED;
+    --sidebar-border: #232C3D;
+    --sidebar-ring: #C9A65B;
+
+    /* ── Charts ── */
+    --chart-1: #C9A65B;
+    --chart-2: #8B93A3;
+    --chart-3: #3A3220;
+    --chart-4: #232C3D;
+    --chart-5: #161D2B;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
