@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { LogoutButton } from "@/components/LogoutButton";
+import { LogoutButton } from "@/components/home/LogoutButton";
 
 export const metadata = { title: "Home — Lumen" };
 
