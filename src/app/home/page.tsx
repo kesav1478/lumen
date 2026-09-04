@@ -1,6 +1,13 @@
+import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { LogoutButton } from "@/components/home/LogoutButton";
+import { GreetingSection } from "./_sections/GreetingSection";
+import { JourneySection } from "./_sections/JourneySection";
+import { GreetingSkeleton } from "@/components/home/GreetingSkeleton";
+import { JourneyCardSkeleton } from "@/components/home/JourneyCardSkeleton";
+import { PrioritiesChecklist } from "@/components/home/PrioritiesChecklist";
+import { QuickActions } from "@/components/home/QuickActions";
 
 export const metadata = { title: "Home — Lumen" };
 
@@ -13,8 +20,8 @@ export default async function HomePage() {
   if (!user) redirect("/login");
 
   return (
-    <div className="flex min-h-screen flex-col">
-      {/* Top bar */}
+    <div className="flex min-h-screen flex-col bg-[var(--background)]">
+      {/* Header */}
       <header className="flex items-center justify-between border-b border-[var(--border)] px-8 py-4">
         <span className="text-lg font-light tracking-widest text-[var(--accent)]">
           Lumen
@@ -25,11 +32,19 @@ export default async function HomePage() {
         </div>
       </header>
 
-      {/* Main content */}
-      <main className="flex flex-1 items-center justify-center">
-        <h1 className="text-3xl font-light text-[var(--text-primary)]">
-          Welcome to Lumen
-        </h1>
+      {/* Main — narrow centered column */}
+      <main className="mx-auto w-full max-w-xl flex-1 space-y-12 px-6 py-14">
+        <Suspense fallback={<GreetingSkeleton />}>
+          <GreetingSection userId={user.id} />
+        </Suspense>
+
+        <Suspense fallback={<JourneyCardSkeleton />}>
+          <JourneySection userId={user.id} />
+        </Suspense>
+
+        <PrioritiesChecklist />
+
+        <QuickActions />
       </main>
     </div>
   );
