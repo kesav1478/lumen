@@ -5,31 +5,30 @@ import { createClient } from "@/lib/supabase/server";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 /**
- * Upserts a row in the profiles table for the given user.
- * Safe to call on every signup AND login — if the row already exists
- * (matched by the primary key `id`) it leaves it untouched.
+ * Guarantees a profiles row exists for the given user.
+ * Only inserts `id` — the one column guaranteed to exist as the primary key.
+ * Safe to call on every login/signup; exits early if the row is already there.
  */
-async function ensureProfile(
-  supabase: SupabaseClient,
-  userId: string,
-  email: string | undefined,
-  displayName?: string
-) {
-  const { error } = await supabase.from("profiles").upsert(
-    {
-      id: userId,
-      email: email ?? null,
-      display_name: displayName ?? null,
-    },
-    {
-      onConflict: "id",      // primary key — no-op if the row already exists
-      ignoreDuplicates: true, // don't overwrite existing data on conflict
-    }
-  );
+async function ensureProfile(supabase: SupabaseClient, userId: string) {
+  const { data: existing, error: selectError } = await supabase
+    .from("profiles")
+    .select("id")
+    .eq("id", userId)
+    .maybeSingle();
 
-  if (error) {
-    // Non-fatal: log and continue. The app degrades gracefully to "Traveller".
-    console.error("[ensureProfile] error:", error.message);
+  if (selectError) {
+    console.error("[ensureProfile] select error:", selectError.message);
+    return;
+  }
+
+  if (existing) return; // row already present — nothing to do
+
+  const { error: insertError } = await supabase
+    .from("profiles")
+    .insert({ id: userId });
+
+  if (insertError) {
+    console.error("[ensureProfile] insert error:", insertError.message);
   }
 }
 
@@ -53,7 +52,7 @@ export async function signUp(formData: FormData) {
   }
 
   if (data.user) {
-    await ensureProfile(supabase, data.user.id, data.user.email);
+    await ensureProfile(supabase, data.user.id);
   }
 
   redirect("/home");
@@ -76,10 +75,8 @@ export async function login(formData: FormData) {
     return { error: error.message };
   }
 
-  // Guarantee a profile row exists — handles users who signed up before
-  // profile creation was reliable, or whose insert silently failed.
   if (data.user) {
-    await ensureProfile(supabase, data.user.id, data.user.email);
+    await ensureProfile(supabase, data.user.id);
   }
 
   redirect("/home");

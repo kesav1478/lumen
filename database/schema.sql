@@ -16,11 +16,8 @@ create extension if not exists "uuid-ossp";
 -- One row per auth user; created automatically on signup.
 create table if not exists profiles (
   id           uuid primary key references auth.users (id) on delete cascade,
-  email        text,
   display_name text,                    -- shown in the greeting on /home
-  avatar_url   text,
-  created_at timestamptz default now() not null,
-  updated_at timestamptz default now() not null
+  created_at   timestamptz default now() not null
 );
 
 alter table profiles enable row level security;
