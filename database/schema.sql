@@ -82,15 +82,21 @@ create policy "Users can manage their own journey steps"
 -- ── notes ────────────────────────────────────────────────────
 -- Free-form text notes, optionally linked to a journey.
 create table if not exists notes (
-  id         uuid primary key default uuid_generate_v4(),
-  user_id    uuid not null references profiles (id) on delete cascade,
-  journey_id uuid references journeys (id) on delete set null,
-  title      text,
-  content    text not null default '',
-  pinned     boolean not null default false,
-  created_at timestamptz default now() not null,
-  updated_at timestamptz default now() not null
+  id          uuid primary key default uuid_generate_v4(),
+  user_id     uuid not null references profiles (id) on delete cascade,
+  journey_id  uuid references journeys (id) on delete set null,
+  title       text,
+  content     text not null default '',
+  tags        text[] default '{}',
+  is_favorite boolean not null default false,
+  created_at  timestamptz default now() not null,
+  updated_at  timestamptz default now() not null
 );
+
+-- Migration: if the table already exists, run these in Supabase SQL Editor:
+-- alter table notes add column if not exists tags text[] default '{}';
+-- alter table notes add column if not exists is_favorite boolean not null default false;
+-- alter table notes drop column if exists pinned;
 
 alter table notes enable row level security;
 
