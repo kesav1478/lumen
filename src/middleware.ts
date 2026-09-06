@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
 const PUBLIC_PATHS = ["/login", "/signup"];
-const PROTECTED_PATHS = ["/home", "/notes", "/curiosity"];
+const PROTECTED_PATHS = ["/home", "/notes", "/curiosity", "/journeys"];
 
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request });
