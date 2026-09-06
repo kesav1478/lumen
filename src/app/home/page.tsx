@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { AppHeader } from "@/components/layout/AppHeader";
 import { LogoutButton } from "@/components/home/LogoutButton";
 import { GreetingSection } from "./_sections/GreetingSection";
 import { JourneySection } from "./_sections/JourneySection";
@@ -21,16 +22,14 @@ export default async function HomePage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-[var(--background)]">
-      {/* Header */}
-      <header className="flex items-center justify-between border-b border-[var(--border)] px-8 py-4">
-        <span className="text-lg font-light tracking-widest text-[var(--accent)]">
-          Lumen
-        </span>
-        <div className="flex items-center gap-4">
-          <span className="text-sm text-[var(--text-muted)]">{user.email}</span>
-          <LogoutButton />
-        </div>
-      </header>
+      <AppHeader
+        right={
+          <div className="flex items-center gap-4">
+            <span className="text-sm text-[var(--text-muted)]">{user.email}</span>
+            <LogoutButton />
+          </div>
+        }
+      />
 
       {/* Main — narrow centered column */}
       <main className="mx-auto w-full max-w-xl flex-1 space-y-12 px-6 py-14">

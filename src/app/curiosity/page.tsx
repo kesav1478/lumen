@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { AppHeader } from "@/components/layout/AppHeader";
 import { CuriosityList } from "./_components/CuriosityList";
 import { CuriosityListSkeleton } from "@/components/curiosity/CuriosityListSkeleton";
 
@@ -16,27 +17,20 @@ export default async function CuriosityPage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-[var(--background)]">
-      {/* Header */}
-      <header className="flex items-center justify-between border-b border-[var(--border)] px-8 py-4">
-        <Link
-          href="/home"
-          className="text-lg font-light tracking-widest text-[var(--accent)]"
-        >
-          Lumen
-        </Link>
-        <Link
-          href="/curiosity/new"
-          className="rounded-lg border border-[var(--border)] px-4 py-1.5 text-sm text-[var(--text-muted)] transition-colors hover:border-[var(--accent)] hover:text-[var(--accent)]"
-        >
-          Capture an idea
-        </Link>
-      </header>
+      <AppHeader
+        right={
+          <Link
+            href="/curiosity/new"
+            className="rounded-lg border border-[var(--border)] px-4 py-1.5 text-sm text-[var(--text-muted)] transition-colors hover:border-[var(--accent)] hover:text-[var(--accent)]"
+          >
+            Capture an idea
+          </Link>
+        }
+      />
 
       <main className="mx-auto w-full max-w-xl flex-1 px-6 py-12">
         <div className="mb-8">
-          <h1 className="text-2xl font-light text-[var(--text-primary)]">
-            Curiosity
-          </h1>
+          <h1 className="text-2xl font-light text-[var(--text-primary)]">Curiosity</h1>
           <p className="mt-1.5 text-sm text-[var(--text-muted)]">
             A quiet parking lot for ideas that show up uninvited.
           </p>
